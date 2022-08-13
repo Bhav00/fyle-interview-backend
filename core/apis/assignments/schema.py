@@ -37,7 +37,9 @@ class AssignmentSubmitSchema(Schema):
         # pylint: disable=unused-argument,no-self-use
         return GeneralObject(**data_dict)
 
-## FOR 2nd TASK ' POST assignments/grade'      SHOULD BE DONE WITH THIS .py
+
+## CHANGE WAS MADE HERE. 
+## For 'POST assignments/grade'. To parse the payload data.
 class AssignmentGradeSchema(Schema):
     class Meta:
         unknown = EXCLUDE

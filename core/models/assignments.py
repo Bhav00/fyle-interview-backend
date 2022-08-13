@@ -7,7 +7,8 @@ from core.models.teachers import Teacher
 from core.models.students import Student
 from sqlalchemy.types import Enum as BaseEnum
 
-
+## CHANGE WAS MADE HERE.
+## Added a method to check if a grade value sent through the API exists in the GradeEnum. Returns True/False.
 class GradeEnum(str, enum.Enum):
     A = 'A'
     B = 'B'
@@ -82,14 +83,14 @@ class Assignment(db.Model):
         return cls.filter(cls.student_id == student_id).all()
 
 
-###   NEW ADDITION   
-### Can be used for both Graded/Submitted check with a change of _state variable
+## CHANGE WAS MADE HERE. -- NEW ADDITION --   
+## Can be used for both Graded/Submitted check with a change of _state variable
     @classmethod
     def assignments_submitted_to_teacher(cls, teacher_id, _state ):
         return cls.filter(cls.teacher_id == teacher_id and cls.state == _state).all()
 
-###   NEW ADDITION   
-### ASSERTIONS NEED TO BE CHANGED ACCORDING TO THE TESTS in TESTS/TEACHERS_TEST.PY
+## CHANGE WAS MADE HERE. -- NEW ADDITION --   
+## Grading an assignment that is submitted to a certain teacher.
     @classmethod
     def grade_assignments(cls, _id, _grade, principal: Principal):
         assignment = Assignment.get_by_id(_id)
@@ -97,6 +98,7 @@ class Assignment(db.Model):
         assertions.assert_found(assignment, 'No assignment with this id was found')
         assertions.assert_valid(GradeEnum.has_value(_grade), 'ValidationError')
         assertions.assert_valid(assignment.teacher_id == principal.teacher_id, 'This assignment is supposed to be graded by the other teacher')
+        
         assignment.grade = GradeEnum(_grade)
         assignment.state = AssignmentStateEnum.GRADED
         db.session.flush()

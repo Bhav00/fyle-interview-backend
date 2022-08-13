@@ -18,12 +18,11 @@ def list_assignments(p):
     return APIResponse.respond(data=submitted_assignments_dump)
 
 
-## NEEDS EDITING -------------
 @teacher_assignments_resources.route('/assignments/grade', methods=['POST'], strict_slashes=False)
 @decorators.accept_payload
 @decorators.auth_principal
-def submit_assignment(p, incoming_payload):
-    """Submit an assignment"""
+def grade_assignment(p, incoming_payload):
+    """Grade an assignment"""
     submit_assignment_payload = AssignmentGradeSchema().load(incoming_payload)
 
     submitted_assignment = Assignment.grade_assignments(

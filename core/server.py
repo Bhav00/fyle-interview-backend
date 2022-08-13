@@ -9,6 +9,8 @@ from werkzeug.exceptions import HTTPException
 
 from sqlalchemy.exc import IntegrityError
 
+## CHANGE WAS MADE HERE.
+## Added blueprint to the /teacher url
 app.register_blueprint(student_assignments_resources, url_prefix='/student')
 app.register_blueprint(teacher_assignments_resources, url_prefix='/teacher')
 
