@@ -4,6 +4,8 @@ from core.apis import decorators
 from core.apis.responses import APIResponse
 from core.models.assignments import Assignment
 from core.models.assignments import AssignmentStateEnum
+from core.models.assignments import GradeEnum
+
 
 from .schema import AssignmentSchema, AssignmentGradeSchema 
 teacher_assignments_resources = Blueprint('teacher_assignments_resources', __name__)
@@ -24,7 +26,7 @@ def list_assignments(p):
 def grade_assignment(p, incoming_payload):
     """Grade an assignment"""
     submit_assignment_payload = AssignmentGradeSchema().load(incoming_payload)
-
+	
     submitted_assignment = Assignment.grade_assignments(
         _id=submit_assignment_payload.id,
         _grade=submit_assignment_payload.grade,
