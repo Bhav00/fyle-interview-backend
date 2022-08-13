@@ -1,4 +1,5 @@
 import enum
+
 from core import db
 from core.apis.decorators import Principal
 from core.libs import helpers, assertions
@@ -75,3 +76,16 @@ class Assignment(db.Model):
     @classmethod
     def get_assignments_by_student(cls, student_id):
         return cls.filter(cls.student_id == student_id).all()
+
+
+###   NEW ADDITION   
+### Should work fine considering the get_assignments_by_students also returns the 'data' in ### a similar fashion wherever the student id matches but here we put up 2 conditions in one thing so I am not sure if it will work fine  <PS> don't understand how filter is working here(the condition param used in that function specifically)
+    @classmethod
+    def assignments_submitted_to_teacher(cls, teacher_id):
+        return cls.filter(cls.teacher_id == teacher_id and cls.state == AssignmentStateEnum.SUBMITTED).all()
+
+###   NEW ADDITION   --------- NEEDS EDITING  SHOULD BE SIMILAR TO SUBMIT()
+    @classmethod
+    def grade_assignments(cls, _id, grade):
+        return
+        return cls.filter(cls.teacher_id == teacher_id).all()

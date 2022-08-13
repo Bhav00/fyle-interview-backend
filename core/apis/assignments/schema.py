@@ -36,3 +36,7 @@ class AssignmentSubmitSchema(Schema):
     def initiate_class(self, data_dict, many, partial):
         # pylint: disable=unused-argument,no-self-use
         return GeneralObject(**data_dict)
+
+
+
+## MAYBE NEED TO CREATE AN ASSIGNMENT SUBMIT SCHEMA CLASS LIKE ABOVE
