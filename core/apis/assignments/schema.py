@@ -37,6 +37,15 @@ class AssignmentSubmitSchema(Schema):
         # pylint: disable=unused-argument,no-self-use
         return GeneralObject(**data_dict)
 
+## FOR 2nd TASK ' POST assignments/grade'      SHOULD BE DONE WITH THIS .py
+class AssignmentGradeSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
 
+    id = fields.Integer(required=True, allow_none=False)
+    grade = fields.String(required=True, allow_none=False)
 
-## MAYBE NEED TO CREATE AN ASSIGNMENT SUBMIT SCHEMA CLASS LIKE ABOVE
+    @post_load
+    def initiate_class(self, data_dict, many, partial):
+        # pylint: disable=unused-argument,no-self-use
+        return GeneralObject(**data_dict)

@@ -13,6 +13,9 @@ class GradeEnum(str, enum.Enum):
     B = 'B'
     C = 'C'
     D = 'D'
+    @classmethod
+    def has_value(cls, value):
+        return value in cls._value2member_map_ 
 
 
 class AssignmentStateEnum(str, enum.Enum):
@@ -66,7 +69,8 @@ class Assignment(db.Model):
         assertions.assert_found(assignment, 'No assignment with this id was found')
         assertions.assert_valid(assignment.student_id == principal.student_id, 'This assignment belongs to some other student')
         assertions.assert_valid(assignment.content is not None, 'assignment with empty content cannot be submitted')
-
+        assertions.assert_valid(assignment.teacher_id is None, 'only a draft assignment can be submitted')
+	
         assignment.teacher_id = teacher_id
         assignment.state = AssignmentStateEnum.SUBMITTED
         db.session.flush()
@@ -79,13 +83,22 @@ class Assignment(db.Model):
 
 
 ###   NEW ADDITION   
-### Should work fine considering the get_assignments_by_students also returns the 'data' in ### a similar fashion wherever the student id matches but here we put up 2 conditions in one thing so I am not sure if it will work fine  <PS> don't understand how filter is working here(the condition param used in that function specifically)
+### Can be used for both Graded/Submitted check with a change of _state variable
     @classmethod
-    def assignments_submitted_to_teacher(cls, teacher_id):
-        return cls.filter(cls.teacher_id == teacher_id and cls.state == AssignmentStateEnum.SUBMITTED).all()
+    def assignments_submitted_to_teacher(cls, teacher_id, _state ):
+        return cls.filter(cls.teacher_id == teacher_id and cls.state == _state).all()
 
-###   NEW ADDITION   --------- NEEDS EDITING  SHOULD BE SIMILAR TO SUBMIT()
+###   NEW ADDITION   
+### ASSERTIONS NEED TO BE CHANGED ACCORDING TO THE TESTS in TESTS/TEACHERS_TEST.PY
     @classmethod
-    def grade_assignments(cls, _id, grade):
-        return
-        return cls.filter(cls.teacher_id == teacher_id).all()
+    def grade_assignments(cls, _id, _grade, principal: Principal):
+        assignment = Assignment.get_by_id(_id)
+        
+        assertions.assert_found(assignment, 'No assignment with this id was found')
+        assertions.assert_valid(GradeEnum.has_value(_grade), 'ValidationError')
+        assertions.assert_valid(assignment.teacher_id == principal.teacher_id, 'This assignment is supposed to be graded by the other teacher')
+        assignment.grade = GradeEnum(_grade)
+        assignment.state = AssignmentStateEnum.GRADED
+        db.session.flush()
+
+        return assignment
