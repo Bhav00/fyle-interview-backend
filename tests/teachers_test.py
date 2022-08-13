@@ -60,16 +60,7 @@ def test_grade_assignment_bad_grade(client, h_teacher_1):
 
     assert response.status_code == 400
     data = response.json
-    assert data['error'] == 'FyleError'
-    
-## CHANGE WAS MADE HERE.
-## Every other bad request calls for fyleError except for this one
-## leading to only this one being the failed test because there is 
-## no validation error class for this thing to use. 
-## Hence, changing the line below to the line above this text.
-## assert data['error'] == 'ValidationError'
-	
-
+    assert data['error'] == 'ValidationError'
 
 
 def test_grade_assignment_bad_assignment(client, h_teacher_1):
