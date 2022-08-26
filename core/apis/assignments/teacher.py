@@ -5,6 +5,7 @@ from core.apis.responses import APIResponse
 from core.models.assignments import Assignment
 from core.models.assignments import AssignmentStateEnum
 from core.models.assignments import GradeEnum
+from core.libs import assertions
 
 
 from .schema import AssignmentSchema, AssignmentGradeSchema 
@@ -33,5 +34,7 @@ def grade_assignment(p, incoming_payload):
         principal=p
     )
     db.session.commit()
+    flag = GradeEnum.has_value(submit_assignment_payload.grade)
+    assertions.assert_valid_err(flag, 'Only grades available in enum are allowed ["A","B","C","D"] ')
     submitted_assignment_dump = AssignmentSchema().dump(submitted_assignment)
     return APIResponse.respond(data=submitted_assignment_dump)
