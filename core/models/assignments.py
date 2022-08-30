@@ -96,7 +96,7 @@ class Assignment(db.Model):
         assignment = Assignment.get_by_id(_id)
         
         assertions.assert_found(assignment, 'No assignment with this id was found')
-        assertions.assert_valid(GradeEnum.has_value(_grade), 'ValidationError')
+        assertions.assert_valid_err(GradeEnum.has_value(_grade), 'Should return the JSON BUT ISNT DOING IT')
         assertions.assert_valid(assignment.teacher_id == principal.teacher_id, 'This assignment is supposed to be graded by the other teacher')
         
         assignment.grade = GradeEnum(_grade)

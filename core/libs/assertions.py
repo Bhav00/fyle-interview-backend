@@ -6,7 +6,7 @@ def base_assert(error_code, msg):
 
 # Base assert for Validation Error
 def valid_base_assert(error_code, msg):
-    raise ValidationError(status_code=error_code, message=msg)
+    return ValidationError(status_code=error_code, message=msg)
 
 def assert_auth(cond, msg='UNAUTHORIZED'):
     if cond is False:
