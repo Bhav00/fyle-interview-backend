@@ -3,6 +3,7 @@ import enum
 from core import db
 from core.apis.decorators import Principal
 from core.libs import helpers, assertions
+from marshmallow.exceptions import ValidationError
 from core.models.teachers import Teacher
 from core.models.students import Student
 from sqlalchemy.types import Enum as BaseEnum
@@ -96,7 +97,7 @@ class Assignment(db.Model):
         assignment = Assignment.get_by_id(_id)
         
         assertions.assert_found(assignment, 'No assignment with this id was found')
-        assertions.assert_valid_err(GradeEnum.has_value(_grade), 'Should return the JSON BUT ISNT DOING IT')
+        # assertions.assert_valid(GradeEnum.has_value(_grade), 'Should return the JSON BUT ISNT DOING IT')
         assertions.assert_valid(assignment.teacher_id == principal.teacher_id, 'This assignment is supposed to be graded by the other teacher')
         
         assignment.grade = GradeEnum(_grade)

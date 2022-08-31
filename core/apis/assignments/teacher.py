@@ -6,6 +6,7 @@ from core.models.assignments import Assignment
 from core.models.assignments import AssignmentStateEnum
 from core.models.assignments import GradeEnum
 from core.libs import assertions
+from marshmallow.exceptions import ValidationError
 
 
 from .schema import AssignmentSchema, AssignmentGradeSchema 
@@ -34,5 +35,9 @@ def grade_assignment(p, incoming_payload):
         principal=p
     )
     db.session.commit()
-    submitted_assignment_dump = AssignmentSchema().dump(submitted_assignment)
+    try:
+        submitted_assignment_dump = AssignmentSchema().dump(submitted_assignment)
+    except:
+        raise ValidationError 
+    
     return APIResponse.respond(data=submitted_assignment_dump)
